@@ -4,7 +4,7 @@ export const getRandomInteger = (a, b) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-export const getRandomArrayElements = elements =>
+export const getRandomArrayElements = (elements) =>
   elements[getRandomInteger(0, elements.length - 1)];
 
 let lastId = 0;
