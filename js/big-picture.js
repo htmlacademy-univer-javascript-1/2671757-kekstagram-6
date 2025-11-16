@@ -1,7 +1,6 @@
 const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureImg = bigPictureElement.querySelector('.big-picture__img img');
 const likesCountElement = bigPictureElement.querySelector('.likes-count');
-const commentsCountElement = bigPictureElement.querySelector('.comments-count');
 const socialCommentsElement = bigPictureElement.querySelector('.social__comments');
 const socialCaptionElement = bigPictureElement.querySelector('.social__caption');
 const socialCommentCountElement = bigPictureElement.querySelector('.social__comment-count');
@@ -32,6 +31,18 @@ const createCommentElement = (comment) => {
   return commentElement;
 };
 
+const updateCommentsCounter = (totalCount) => {
+  socialCommentCountElement.innerHTML = `${shownCommentsCount} из <span class="comments-count">${totalCount}</span> комментариев`;
+};
+
+const toggleLoadMoreButton = (totalCount) => {
+  if (shownCommentsCount >= totalCount) {
+    commentsLoaderElement.classList.add('hidden');
+  } else {
+    commentsLoaderElement.classList.remove('hidden');
+  }
+};
+
 const renderComments = (comments, startIndex = 0) => {
   const endIndex = Math.min(startIndex + COMMENTS_PER_PAGE, comments.length);
   const commentsToShow = comments.slice(startIndex, endIndex);
@@ -44,18 +55,6 @@ const renderComments = (comments, startIndex = 0) => {
   shownCommentsCount = endIndex;
   updateCommentsCounter(comments.length);
   toggleLoadMoreButton(comments.length);
-};
-
-const updateCommentsCounter = (totalCount) => {
-  socialCommentCountElement.innerHTML = `${shownCommentsCount} из <span class="comments-count">${totalCount}</span> комментариев`;
-};
-
-const toggleLoadMoreButton = (totalCount) => {
-  if (shownCommentsCount >= totalCount) {
-    commentsLoaderElement.classList.add('hidden');
-  } else {
-    commentsLoaderElement.classList.remove('hidden');
-  }
 };
 
 const onLoadMoreClick = () => {
