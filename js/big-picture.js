@@ -13,18 +13,18 @@ const renderComments = (comments) => {
   comments.forEach((comment) => {
     const commentElement = document.createElement('li');
     commentElement.className = 'social__comment';
-    
+
     const imgElement = document.createElement('img');
     imgElement.className = 'social__picture';
     imgElement.src = comment.avatar;
     imgElement.alt = comment.name;
     imgElement.width = 35;
     imgElement.height = 35;
-    
+
     const textElement = document.createElement('p');
     textElement.className = 'social__text';
     textElement.textContent = comment.message;
-    
+
     commentElement.appendChild(imgElement);
     commentElement.appendChild(textElement);
     socialCommentsElement.appendChild(commentElement);
@@ -37,12 +37,12 @@ const openBigPicture = (photo) => {
   likesCountElement.textContent = photo.likes;
   commentsCountElement.textContent = photo.comments.length;
   socialCaptionElement.textContent = photo.description;
-  
+
   renderComments(photo.comments);
-  
+
   socialCommentCountElement.classList.add('hidden');
   commentsLoaderElement.classList.add('hidden');
-  
+
   bigPictureElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
 };
