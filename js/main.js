@@ -14,7 +14,6 @@ const filterRandomButton = document.querySelector('#filter-random');
 const filterDiscussedButton = document.querySelector('#filter-discussed');
 
 let photosData = [];
-let currentPhotos = [];
 
 const clearThumbnails = () => {
   picturesContainer.querySelectorAll('.picture').forEach((picture) => picture.remove());
@@ -73,7 +72,6 @@ const debounce = (callback, delay = DEBOUNCE_DELAY) => {
 };
 
 const updateGallery = (photos) => {
-  currentPhotos = photos;
   renderThumbnails(photos);
 };
 
