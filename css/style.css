@@ -697,6 +697,28 @@ main {
   border-radius: 5px;
 }
 
+.img-upload__field-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.img-upload__field-wrapper--error .text__hashtags,
+.img-upload__field-wrapper--error .text__description {
+  border: 2px solid #ff4e4e;
+}
+
+.img-upload__error {
+  width: 450px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #ff4e4e;
+  text-align: left;
+}
+
+
 
 /**
  * Кнопка для отправки изображения
@@ -731,6 +753,7 @@ main {
 .img-upload__submit:disabled,
 .img-upload__submit--disabled {
   opacity: 0.3;
+  cursor: not-allowed;
 }
 
 
