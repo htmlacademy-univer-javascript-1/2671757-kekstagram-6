@@ -179,13 +179,6 @@ const initSlider = () => {
   });
 };
 
-const destroySlider = () => {
-  if (sliderInstance) {
-    sliderInstance.destroy();
-    sliderInstance = null;
-  }
-};
-
 const onEffectChange = (evt) => {
   setEffect(evt.target.value);
 };
@@ -254,12 +247,6 @@ const showMessage = (templateId) => {
   const innerElement = messageElement.querySelector(innerSelector);
   const button = messageElement.querySelector(`.${templateId}__button`);
 
-  const closeMessage = () => {
-    messageElement.remove();
-    document.removeEventListener('keydown', onMessageEsc);
-    messageElement.removeEventListener('click', onMessageClick);
-  };
-
   const onMessageEsc = (evt) => {
     if (evt.key === 'Escape') {
       closeMessage();
@@ -270,6 +257,12 @@ const showMessage = (templateId) => {
     if (!innerElement.contains(evt.target)) {
       closeMessage();
     }
+  };
+
+  const closeMessage = () => {
+    messageElement.remove();
+    document.removeEventListener('keydown', onMessageEsc);
+    messageElement.removeEventListener('click', onMessageClick);
   };
 
   button.addEventListener('click', closeMessage);
