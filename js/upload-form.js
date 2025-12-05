@@ -247,22 +247,26 @@ const showMessage = (templateId) => {
   const innerElement = messageElement.querySelector(innerSelector);
   const button = messageElement.querySelector(`.${templateId}__button`);
 
-  const closeMessage = () => {
-    messageElement.remove();
-    document.removeEventListener('keydown', onMessageEsc);
-    messageElement.removeEventListener('click', onMessageClick);
-  };
-
   const onMessageEsc = (evt) => {
     if (evt.key === 'Escape') {
-      closeMessage();
+      messageElement.remove();
+      document.removeEventListener('keydown', onMessageEsc);
+      messageElement.removeEventListener('click', onMessageClick);
     }
   };
 
   const onMessageClick = (evt) => {
     if (!innerElement.contains(evt.target)) {
-      closeMessage();
+      messageElement.remove();
+      document.removeEventListener('keydown', onMessageEsc);
+      messageElement.removeEventListener('click', onMessageClick);
     }
+  };
+
+  const closeMessage = () => {
+    messageElement.remove();
+    document.removeEventListener('keydown', onMessageEsc);
+    messageElement.removeEventListener('click', onMessageClick);
   };
 
   button.addEventListener('click', closeMessage);
