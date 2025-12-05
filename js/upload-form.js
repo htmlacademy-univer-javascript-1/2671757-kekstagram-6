@@ -247,27 +247,23 @@ const showMessage = (templateId) => {
   const innerElement = messageElement.querySelector(innerSelector);
   const button = messageElement.querySelector(`.${templateId}__button`);
 
-  const onMessageEsc = (evt) => {
-    if (evt.key === 'Escape') {
-      messageElement.remove();
-      document.removeEventListener('keydown', onMessageEsc);
-      messageElement.removeEventListener('click', onMessageClick);
-    }
-  };
-
-  const onMessageClick = (evt) => {
-    if (!innerElement.contains(evt.target)) {
-      messageElement.remove();
-      document.removeEventListener('keydown', onMessageEsc);
-      messageElement.removeEventListener('click', onMessageClick);
-    }
-  };
-
-  const closeMessage = () => {
+  function closeMessage() {
     messageElement.remove();
     document.removeEventListener('keydown', onMessageEsc);
     messageElement.removeEventListener('click', onMessageClick);
-  };
+  }
+
+  function onMessageEsc(evt) {
+    if (evt.key === 'Escape') {
+      closeMessage();
+    }
+  }
+
+  function onMessageClick(evt) {
+    if (!innerElement.contains(evt.target)) {
+      closeMessage();
+    }
+  }
 
   button.addEventListener('click', closeMessage);
   messageElement.addEventListener('click', onMessageClick);
