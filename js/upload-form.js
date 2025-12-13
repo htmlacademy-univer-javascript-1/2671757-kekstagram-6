@@ -1,3 +1,5 @@
+import { sendPhoto } from './api.js';
+
 const uploadFormElement = document.querySelector('.img-upload__form');
 const uploadFileInput = uploadFormElement.querySelector('#upload-file');
 const uploadOverlayElement = uploadFormElement.querySelector('.img-upload__overlay');
@@ -13,7 +15,6 @@ const effectLevelContainer = uploadFormElement.querySelector('.img-upload__effec
 const effectLevelSliderElement = uploadFormElement.querySelector('.effect-level__slider');
 const effectLevelValueElement = uploadFormElement.querySelector('.effect-level__value');
 const effectsRadioButtons = uploadFormElement.querySelectorAll('.effects__radio');
-const effectsPreviewElements = uploadFormElement.querySelectorAll('.effects__preview');
 
 const SCALE_STEP = 25;
 const SCALE_MIN = 25;
@@ -23,7 +24,6 @@ const SCALE_DEFAULT = 100;
 const MAX_COMMENT_LENGTH = 140;
 const MAX_HASHTAGS_COUNT = 5;
 const HASHTAG_PATTERN = /^#[a-zа-яё0-9]{1,19}$/i;
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const EFFECTS = {
   none: {
@@ -68,8 +68,6 @@ let pristine;
 let currentScale = SCALE_DEFAULT;
 let currentEffect = 'none';
 let sliderInstance = null;
-const defaultPreviewSrc = previewImageElement.src;
-let previewImageUrl = '';
 
 const getHashtagsArray = (value) => value
   .trim()
@@ -140,17 +138,12 @@ const setEffect = (effectName) => {
 
   if (effectName === 'none') {
     effectLevelContainer.classList.add('hidden');
-    effectLevelValueElement.value = EFFECTS.none.max;
-    if (sliderInstance) {
-      sliderInstance.set(EFFECTS.none.max);
-    }
-    applyEffect('none', EFFECTS.none.max);
+    applyEffect('none', 0);
     return;
   }
 
   const effect = EFFECTS[effectName];
   effectLevelContainer.classList.remove('hidden');
-  effectLevelValueElement.value = effect.max;
 
   if (sliderInstance) {
     sliderInstance.updateOptions({
@@ -161,10 +154,7 @@ const setEffect = (effectName) => {
       step: effect.step,
       start: effect.max
     });
-    sliderInstance.set(effect.max);
   }
-
-  applyEffect(effectName, effect.max);
 };
 
 const initSlider = () => {
@@ -193,39 +183,6 @@ const onEffectChange = (evt) => {
   setEffect(evt.target.value);
 };
 
-const resetPreviewImage = () => {
-  previewImageElement.src = defaultPreviewSrc;
-  effectsPreviewElements.forEach((preview) => {
-    preview.style.backgroundImage = '';
-  });
-
-  if (previewImageUrl) {
-    URL.revokeObjectURL(previewImageUrl);
-    previewImageUrl = '';
-  }
-};
-
-const updatePreviewImage = (file) => {
-  const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((ext) => fileName.endsWith(ext));
-
-  if (!matches) {
-    return false;
-  }
-
-  if (previewImageUrl) {
-    URL.revokeObjectURL(previewImageUrl);
-  }
-
-  previewImageUrl = URL.createObjectURL(file);
-  previewImageElement.src = previewImageUrl;
-  effectsPreviewElements.forEach((preview) => {
-    preview.style.backgroundImage = `url(${previewImageUrl})`;
-  });
-
-  return true;
-};
-
 const closeUploadOverlay = () => {
   uploadOverlayElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -233,7 +190,6 @@ const closeUploadOverlay = () => {
   uploadFileInput.value = '';
   resetScale();
   setEffect('none');
-  resetPreviewImage();
 
   if (sliderInstance) {
     sliderInstance.set(EFFECTS.none.max);
@@ -272,15 +228,6 @@ const openUploadOverlay = () => {
 };
 
 const onUploadFileChange = () => {
-  const file = uploadFileInput.files[0];
-  if (!file) {
-    return;
-  }
-
-  if (!updatePreviewImage(file)) {
-    return;
-  }
-
   openUploadOverlay();
 };
 
@@ -300,6 +247,12 @@ const showMessage = (templateId) => {
   const innerElement = messageElement.querySelector(innerSelector);
   const button = messageElement.querySelector(`.${templateId}__button`);
 
+  function closeMessage() {
+    messageElement.remove();
+    document.removeEventListener('keydown', onMessageEsc);
+    messageElement.removeEventListener('click', onMessageClick);
+  }
+
   function onMessageEsc(evt) {
     if (evt.key === 'Escape') {
       closeMessage();
@@ -310,12 +263,6 @@ const showMessage = (templateId) => {
     if (!innerElement.contains(evt.target)) {
       closeMessage();
     }
-  }
-
-  function closeMessage() {
-    messageElement.remove();
-    document.removeEventListener('keydown', onMessageEsc);
-    messageElement.removeEventListener('click', onMessageClick);
   }
 
   button.addEventListener('click', closeMessage);
@@ -344,15 +291,7 @@ const onFormSubmit = async (evt) => {
   blockSubmitButton();
 
   try {
-    const response = await fetch(uploadFormElement.action, {
-      method: 'POST',
-      body: new FormData(uploadFormElement)
-    });
-
-    if (!response.ok) {
-      throw new Error('Ошибка отправки данных');
-    }
-
+    await sendPhoto(new FormData(uploadFormElement));
     closeUploadOverlay();
     showMessage('success');
   } catch (error) {

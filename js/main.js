@@ -1,7 +1,7 @@
 import { openBigPicture } from './big-picture.js';
 import { initUploadForm } from './upload-form.js';
+import { getPhotos } from './api.js';
 
-const SERVER_URL = 'https://29.javascript.htmlacademy.pro/kekstagram';
 const RANDOM_PHOTOS_COUNT = 10;
 const DEBOUNCE_DELAY = 500;
 
@@ -113,12 +113,7 @@ const showErrorBanner = (message) => {
 
 const loadPhotos = async () => {
   try {
-    const response = await fetch(`${SERVER_URL}/data`);
-    if (!response.ok) {
-      throw new Error('Не удалось загрузить фотографии');
-    }
-
-    photosData = await response.json();
+    photosData = await getPhotos();
     updateGallery(photosData);
     filtersSection.classList.remove('img-filters--inactive');
 
