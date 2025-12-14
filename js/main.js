@@ -54,7 +54,10 @@ const shuffleArray = (array) => {
   return copy;
 };
 
-const getRandomPhotos = (photos) => shuffleArray(photos).slice(0, RANDOM_PHOTOS_COUNT);
+const getRandomPhotos = (photos) => {
+  const shuffled = shuffleArray(photos);
+  return shuffled.slice(0, RANDOM_PHOTOS_COUNT);
+};
 
 const getDiscussedPhotos = (photos) => [...photos].sort((a, b) => b.comments.length - a.comments.length);
 

@@ -195,6 +195,12 @@ const closeUploadOverlay = () => {
     sliderInstance.set(EFFECTS.none.max);
   }
 
+  previewImageElement.src = 'img/upload-default-image.jpg';
+  const effectsPreviews = uploadFormElement.querySelectorAll('.effects__preview');
+  effectsPreviews.forEach((preview) => {
+    preview.style.backgroundImage = '';
+  });
+
   if (pristine) {
     pristine.reset();
   }
@@ -227,8 +233,28 @@ const openUploadOverlay = () => {
   }
 };
 
-const onUploadFileChange = () => {
-  openUploadOverlay();
+const updatePreviewImage = (file) => {
+  if (!file || !file.type.startsWith('image/')) {
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    previewImageElement.src = e.target.result;
+    const effectsPreviews = uploadFormElement.querySelectorAll('.effects__preview');
+    effectsPreviews.forEach((preview) => {
+      preview.style.backgroundImage = `url(${e.target.result})`;
+    });
+  };
+  reader.readAsDataURL(file);
+};
+
+const onUploadFileChange = (evt) => {
+  const file = evt.target.files[0];
+  if (file) {
+    updatePreviewImage(file);
+    openUploadOverlay();
+  }
 };
 
 const onCancelButtonClick = (evt) => {
