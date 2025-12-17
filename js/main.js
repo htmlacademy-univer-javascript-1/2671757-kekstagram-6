@@ -4,6 +4,14 @@ import { getPhotos } from './api.js';
 
 const RANDOM_PHOTOS_COUNT = 10;
 const DEBOUNCE_DELAY = 500;
+const ERROR_BANNER_TOP = 20;
+const ERROR_BANNER_LEFT_PERCENT = 50;
+const ERROR_BANNER_PADDING_VERTICAL = 15;
+const ERROR_BANNER_PADDING_HORIZONTAL = 25;
+const ERROR_BANNER_FONT_WEIGHT = 700;
+const ERROR_BANNER_BORDER_RADIUS = 6;
+const ERROR_BANNER_Z_INDEX = 9999;
+const ERROR_BANNER_TIMEOUT = 5000;
 
 const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -61,9 +69,14 @@ const getRandomPhotos = (photos) => {
 
 const getDiscussedPhotos = (photos) => [...photos].sort((a, b) => b.comments.length - a.comments.length);
 
+let currentActiveFilterButton = null;
+
 const setActiveFilterButton = (activeButton) => {
-  filterButtons.forEach((button) => button.classList.remove('img-filters__button--active'));
+  if (currentActiveFilterButton) {
+    currentActiveFilterButton.classList.remove('img-filters__button--active');
+  }
   activeButton.classList.add('img-filters__button--active');
+  currentActiveFilterButton = activeButton;
 };
 
 const debounce = (callback, delay = DEBOUNCE_DELAY) => {
@@ -100,18 +113,18 @@ const showErrorBanner = (message) => {
   errorElement.textContent = message;
   errorElement.style.cssText = `
     position: fixed;
-    top: 20px;
-    left: 50%;
+    top: ${ERROR_BANNER_TOP}px;
+    left: ${ERROR_BANNER_LEFT_PERCENT}%;
     transform: translateX(-50%);
-    padding: 15px 25px;
+    padding: ${ERROR_BANNER_PADDING_VERTICAL}px ${ERROR_BANNER_PADDING_HORIZONTAL}px;
     background: #ff4e4e;
     color: #ffffff;
-    font-weight: 700;
-    border-radius: 6px;
-    z-index: 9999;
+    font-weight: ${ERROR_BANNER_FONT_WEIGHT};
+    border-radius: ${ERROR_BANNER_BORDER_RADIUS}px;
+    z-index: ${ERROR_BANNER_Z_INDEX};
   `;
   document.body.appendChild(errorElement);
-  setTimeout(() => errorElement.remove(), 5000);
+  setTimeout(() => errorElement.remove(), ERROR_BANNER_TIMEOUT);
 };
 
 const loadPhotos = async () => {
