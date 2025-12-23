@@ -13,7 +13,6 @@ const filterRandomButton = document.querySelector('#filter-random');
 const filterDiscussedButton = document.querySelector('#filter-discussed');
 
 let photosData = [];
-let currentActiveFilterButton = null;
 
 let currentActiveFilterButton = null;
 
