@@ -47,13 +47,14 @@ const setEffect = (effectName) => {
       step: effect.step,
       start: effect.max
     });
-  } else {
-    // если по какой-то причине слайдер ещё не создан
-    if (effectLevelValueElement) {
-      effectLevelValueElement.value = effect.max;
-    }
-    applyEffect(effectName, effect.max);
+    return;
   }
+
+  // если по какой-то причине слайдер ещё не создан
+  if (effectLevelValueElement) {
+    effectLevelValueElement.value = effect.max;
+  }
+  applyEffect(effectName, effect.max);
 };
 
 const initSlider = () => {

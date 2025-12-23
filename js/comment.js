@@ -44,9 +44,9 @@ const toggleLoadMoreButton = (totalCount) => {
 
   if (shownCommentsCount >= totalCount) {
     commentsLoaderElement.classList.add('hidden');
-  } else {
-    commentsLoaderElement.classList.remove('hidden');
+    return;
   }
+  commentsLoaderElement.classList.remove('hidden');
 };
 
 const renderComments = (comments, startIndex = 0) => {

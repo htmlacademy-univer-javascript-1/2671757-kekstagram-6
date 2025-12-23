@@ -11,25 +11,25 @@ const showMessage = (templateId) => {
   const innerElement = messageElement.querySelector(innerSelector);
   const button = messageElement.querySelector(`.${templateId}__button`);
 
-  function closeMessage() {
+  const closeMessage = () => {
     messageElement.remove();
-    document.removeEventListener('keydown', onMessageEsc, true); // Use capture phase
+    document.removeEventListener('keydown', onMessageEsc, true);
     messageElement.removeEventListener('click', onMessageClick);
-  }
+  };
 
-  function onMessageEsc(evt) {
+  const onMessageEsc = (evt) => {
     if (evt.key === 'Escape') {
-      evt.preventDefault(); // Prevent default browser action
-      evt.stopImmediatePropagation(); // Stop propagation immediately
+      evt.preventDefault();
+      evt.stopImmediatePropagation();
       closeMessage();
     }
-  }
+  };
 
-  function onMessageClick(evt) {
+  const onMessageClick = (evt) => {
     if (!innerElement.contains(evt.target)) {
       closeMessage();
     }
-  }
+  };
 
   button.addEventListener('click', closeMessage);
   messageElement.addEventListener('click', onMessageClick);

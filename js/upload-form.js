@@ -36,7 +36,7 @@ const closeUploadOverlay = () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
-function onDocumentKeydown(evt) {
+const onDocumentKeydown = (evt) => {
   if (evt.key === 'Escape') {
     if (isTextFieldFocused()) {
       evt.stopPropagation();
@@ -46,7 +46,7 @@ function onDocumentKeydown(evt) {
     evt.preventDefault();
     closeUploadOverlay();
   }
-}
+};
 
 const openUploadOverlay = () => {
   uploadOverlayElement.classList.remove('hidden');

@@ -15,6 +15,8 @@ const filterDiscussedButton = document.querySelector('#filter-discussed');
 let photosData = [];
 let currentActiveFilterButton = null;
 
+let currentActiveFilterButton = null;
+
 const setActiveFilterButton = (activeButton) => {
   if (currentActiveFilterButton) {
     currentActiveFilterButton.classList.remove('img-filters__button--active');
@@ -95,7 +97,8 @@ const initLoadPhotos = () => {
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initLoadPhotos);
-} else {
-  // DOM already loaded
-  initLoadPhotos();
+  return;
 }
+
+// DOM already loaded
+initLoadPhotos();

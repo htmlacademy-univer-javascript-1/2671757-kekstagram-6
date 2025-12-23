@@ -97,12 +97,7 @@ const initValidation = (formElement, hashtags, comment) => {
   });
 };
 
-const validate = () => {
-  if (pristine) {
-    return pristine.validate();
-  }
-  return false;
-};
+const validate = () => pristine ? pristine.validate() : false;
 
 const reset = () => {
   if (pristine) {
@@ -122,8 +117,12 @@ const clearErrors = (formElement) => {
   // Also remove error classes from fields
   const fieldWrappers = formElement.querySelectorAll('.img-upload__field-wrapper');
   fieldWrappers.forEach((wrapper) => {
-    wrapper.classList.remove('img-upload__field-wrapper--error');
-    wrapper.classList.remove('img-upload__field-wrapper--success');
+    if (wrapper.classList.contains('img-upload__field-wrapper--error')) {
+      wrapper.classList.remove('img-upload__field-wrapper--error');
+    }
+    if (wrapper.classList.contains('img-upload__field-wrapper--success')) {
+      wrapper.classList.remove('img-upload__field-wrapper--success');
+    }
   });
 };
 

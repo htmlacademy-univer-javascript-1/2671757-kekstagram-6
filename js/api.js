@@ -33,9 +33,9 @@ const makeRequest = (url, method = Method.GET, body = null) =>
           response = null;
         }
         resolve(response);
-      } else {
-        reject(new Error(`Ошибка запроса: ${xhr.status} ${xhr.statusText}`));
+        return;
       }
+      reject(new Error(`Ошибка запроса: ${xhr.status} ${xhr.statusText}`));
     };
 
     xhr.onerror = () => reject(new Error('Ошибка сети'));
