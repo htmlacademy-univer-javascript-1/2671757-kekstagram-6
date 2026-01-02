@@ -11,12 +11,6 @@ const showMessage = (templateId) => {
   const innerElement = messageElement.querySelector(innerSelector);
   const button = messageElement.querySelector(`.${templateId}__button`);
 
-  const closeMessage = () => {
-    messageElement.remove();
-    document.removeEventListener('keydown', onMessageEsc, true);
-    messageElement.removeEventListener('click', onMessageClick);
-  };
-
   const onMessageEsc = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
@@ -30,6 +24,12 @@ const showMessage = (templateId) => {
       closeMessage();
     }
   };
+
+  function closeMessage() {
+    messageElement.remove();
+    document.removeEventListener('keydown', onMessageEsc, true);
+    messageElement.removeEventListener('click', onMessageClick);
+  }
 
   button.addEventListener('click', closeMessage);
   messageElement.addEventListener('click', onMessageClick);

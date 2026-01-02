@@ -22,6 +22,8 @@ const effectLevelValueElement = uploadFormElement.querySelector('.effect-level__
 const effectsRadioButtons = uploadFormElement.querySelectorAll('.effects__radio');
 const effectsPreviews = uploadFormElement.querySelectorAll('.effects__preview');
 
+let onDocumentKeydown = null;
+
 const closeUploadOverlay = () => {
   uploadOverlayElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -33,10 +35,12 @@ const closeUploadOverlay = () => {
   resetPreviewImage();
   clearErrors(uploadFormElement);
 
-  document.removeEventListener('keydown', onDocumentKeydown);
+  if (onDocumentKeydown) {
+    document.removeEventListener('keydown', onDocumentKeydown);
+  }
 };
 
-const onDocumentKeydown = (evt) => {
+onDocumentKeydown = (evt) => {
   if (evt.key === 'Escape') {
     if (isTextFieldFocused()) {
       evt.stopPropagation();

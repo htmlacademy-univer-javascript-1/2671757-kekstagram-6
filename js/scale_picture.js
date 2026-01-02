@@ -12,7 +12,9 @@ let previewImageElement = null;
 const updateScale = (value) => {
   currentScale = value;
   if (scaleValueElement) {
-    scaleValueElement.value = `${value}%`;
+    const scaleValue = `${value}%`;
+    scaleValueElement.value = scaleValue;
+    scaleValueElement.setAttribute('value', scaleValue);
   }
   if (previewImageElement) {
     previewImageElement.style.transform = `scale(${value / 100})`;
