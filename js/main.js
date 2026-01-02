@@ -96,8 +96,7 @@ const initLoadPhotos = () => {
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initLoadPhotos);
-  return;
+} else {
+  // DOM already loaded
+  initLoadPhotos();
 }
-
-// DOM already loaded
-initLoadPhotos();
